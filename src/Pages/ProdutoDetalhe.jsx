@@ -1,17 +1,24 @@
-import { useParams, Link } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { useParams } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
-import { FaShoppingCart } from "react-icons/fa";
+import Header from "../Conponetes/Header";
+import Footer from "../Conponetes/Footer";
+import { CarrinhoContext } from "../Context/Carrinho";
 
 export default function ProdutoDetalhe() {
+  const { adicionarAoCarrinho } = useContext(CarrinhoContext);
+
   const { id } = useParams();
+
   const [produto, setProduto] = useState({
+    id: "",
     nome: "",
     valorVenda: 0,
     imagemUrl: "",
     tipoBebida: "",
   });
+
   const [quantidade, setQuantidade] = useState(1);
   const valorTotal = quantidade * produto.valorVenda;
 
@@ -20,7 +27,7 @@ export default function ProdutoDetalhe() {
       const produtoRef = doc(db, "itens", id);
       const snapshot = await getDoc(produtoRef);
       if (snapshot.exists()) {
-        setProduto(snapshot.data());
+        setProduto({ id: snapshot.id, ...snapshot.data() });
       }
     };
     fetchProduto();
@@ -36,34 +43,9 @@ export default function ProdutoDetalhe() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
-      {/* Header */}
-      <header className="bg-blue-600 text-white py-4 shadow-lg sticky top-0 z-50">
-        <div className="container mx-auto flex justify-between items-center px-6">
-          <h1 className="text-2xl font-bold">Minha Loja</h1>
-          <nav className="space-x-6 flex items-center">
-            <Link to="/" className="hover:underline">
-              Home
-            </Link>
-            <Link to="/produtos" className="hover:underline">
-              Produtos
-            </Link>
-            <Link to="/contato" className="hover:underline">
-              Contato
-            </Link>
-            <Link to="/carrinho" className="relative">
-              <FaShoppingCart className="text-2xl" />
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
-                0
-              </span>
-            </Link>
-          </nav>
-        </div>
-      </header>
-
-      {/* Conteúdo */}
+      <Header />
       <main className="flex-1 container mx-auto px-6 py-12 flex justify-center">
         <div className="    p-10 flex flex-col md:flex-row gap-12 max-w-5xl w-full">
-          {/* Imagem */}
           <div className="flex-1 flex items-center justify-center">
             {produto.imagemUrl ? (
               <img
@@ -112,16 +94,9 @@ export default function ProdutoDetalhe() {
               </p>
             </div>
 
-            {/* Botão de ação */}
             <button
-              onClick={() => {
-                console.log(
-                  "Adicionado ao carrinho:",
-                  produto.nome,
-                  quantidade,
-                );
-              }}
-              className="w-full bg-blue-600 text-white py-4 rounded-lg hover:bg-blue-700 transition text-lg font-semibold shadow-md"
+              onClick={() => adicionarAoCarrinho(produto, quantidade)}
+              className="w-full bg-blue-900 text-white py-4 rounded-lg hover:bg-blue-700 transition text-lg font-semibold shadow-md"
             >
               Adicionar ao Carrinho
             </button>
@@ -129,15 +104,7 @@ export default function ProdutoDetalhe() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-blue-600 text-white py-4 mt-10">
-        <div className="container mx-auto text-center">
-          <p className="text-sm">
-            © {new Date().getFullYear()} Minha Loja. Todos os direitos
-            reservados.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

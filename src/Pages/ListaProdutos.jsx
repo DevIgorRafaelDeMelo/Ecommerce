@@ -143,10 +143,10 @@ export default function ListaProdutos() {
   useEffect(() => {
     if (mensagem) {
       const timer = setTimeout(() => {
-        setMensagem(""); // limpa a mensagem após 3 segundos
+        setMensagem("");
       }, 3000);
 
-      return () => clearTimeout(timer); // limpa o timer se o componente desmontar
+      return () => clearTimeout(timer);
     }
   }, [mensagem]);
 

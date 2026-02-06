@@ -5,10 +5,11 @@ import { FaSearch, FaShoppingCart } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Header from "../Conponetes/Header";
 import Footer from "../Conponetes/Footer";
+import Carrinho from "../Pages/Carinho";
 
 export default function Home() {
   const [produtos, setProdutos] = useState([]);
-  const [busca, setBusca] = useState("");
+  const [busca] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,7 +31,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col ">
-      <Header />
+      <Header /> 
 
       <main className="flex-1 container mx-auto px-6 py-16 ">
         {/* Título */}
@@ -73,15 +74,12 @@ export default function Home() {
                   </div>
                 )}
 
-                {/* Conteúdo */}
                 <div className="p-4 flex flex-col gap-2">
-                  {/* Nome */}
                   <h3 className="text-lg font-bold text-gray-900 truncate">
                     {produto.nome}
                   </h3>
                   <p className="text-sm text-gray-500">{produto.tipoBebida}</p>
 
-                  {/* Preços */}
                   <div className="flex items-center gap-2">
                     <span className="text-gray-400 line-through text-sm">
                       R$ {produto.precoOriginal}
@@ -91,24 +89,26 @@ export default function Home() {
                     </span>
                   </div>
 
-                  {/* Parcelamento */}
                   <p className="text-sm text-gray-500">
                     3x de R$ {(produto.valorVenda / 3).toFixed(2)} sem juros
                   </p>
 
-                  {/* Desconto */}
                   <span className="text-black font-bold text-sm">
                     -{produto.desconto}% OFF
                   </span>
 
-                  {/* Status / Botão */}
                   {produto.esgotado ? (
                     <span className="text-black font-bold text-sm mt-2">
                       ESGOTADO
                     </span>
                   ) : (
                     <button className="mt-3 w-full bg-gray-700 text-white py-2 rounded-lg hover:bg-gray-900 transition">
-                      Comprar
+                      <Link
+                        to={`/produto/${produto.id}`}
+                        className="block w-full h-full"
+                      >
+                        Comprar
+                      </Link>
                     </button>
                   )}
                 </div>

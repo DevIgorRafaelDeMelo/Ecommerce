@@ -52,8 +52,7 @@ export default function Cadastro() {
       setTipoBebida("");
       setImagem(null);
       setLoadingSave(false);
-    } catch (error) {
-      console.error("Erro ao salvar:", error);
+    } catch {
       setMensagem("Erro ao salvar item!");
       setLoadingSave(false);
     }

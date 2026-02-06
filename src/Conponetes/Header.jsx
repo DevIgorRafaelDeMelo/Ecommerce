@@ -1,10 +1,19 @@
 import React from "react";
-
-import { FiSearch, FiUser, FiShoppingBag } from "react-icons/fi";
+import { useContext } from "react";
+import { CarrinhoContext } from "../Context/Carrinho";
+import {
+  FiSearch,
+  FiUser,
+  FiShoppingBag,
+  FiShoppingCart,
+} from "react-icons/fi";
+import { Link } from "react-router-dom";
 
 export default function Header() {
+  const { itensCarrinho } = useContext(CarrinhoContext);
+
   return (
-    <header className="  top-0 w-full z-50">
+    <header className=" top-0 w-full z-50">
       <div className="bg-gray-900 text-white text-xs py-2 overflow-hidden">
         <div className="whitespace-nowrap animate-marquee">
           <span className="mx-8">
@@ -60,9 +69,7 @@ export default function Header() {
           </a>
         </nav>
 
-        {/* Barra de busca + ícones */}
         <div className="container mx-auto flex justify-end items-center py-4 px-6 space-x-6">
-          {/* Busca */}
           <div className="relative w-64">
             <input
               type="text"
@@ -75,18 +82,25 @@ export default function Header() {
             />
           </div>
 
-          {/* Conta */}
           <button className="hover:text-red-600 transition">
             <FiUser size={22} />
           </button>
 
-          {/* Carrinho */}
           <button className="relative hover:text-red-600 transition">
             <FiShoppingBag size={22} />
             <span className="absolute -top-2 -right-2 bg-black-600 text-white text-xs rounded-full px-2">
               0
             </span>
           </button>
+          <Link
+            to="/carinho"
+            className="relative hover:text-red-600 transition"
+          >
+            <FiShoppingCart size={24} />
+            <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full px-2">
+              {itensCarrinho.length}
+            </span>
+          </Link>
         </div>
       </div>
     </header>
