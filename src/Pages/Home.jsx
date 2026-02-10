@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../../firebase";
 import { collection, onSnapshot } from "firebase/firestore";
-import { FaSearch, FaShoppingCart } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Header from "../Conponetes/Header";
 import Footer from "../Conponetes/Footer";
-import Carrinho from "../Pages/Carinho";
 
 export default function Home() {
   const [produtos, setProdutos] = useState([]);
-  const [busca] = useState("");
+  const [busca, setBusca] = useState("");
   const [loading, setLoading] = useState(true);
+  const [filtro, setFiltro] = useState(null);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "itens"), (snapshot) => {
@@ -25,22 +24,22 @@ export default function Home() {
     return () => unsubscribe();
   }, []);
 
-  const produtosFiltrados = produtos.filter((p) =>
-    p.nome.toLowerCase().includes(busca.toLowerCase()),
-  );
+  const produtosFiltrados = produtos.filter((p) => {
+    const matchNome = p.nome.toLowerCase().includes(busca.toLowerCase());
+    const matchTipo = filtro ? p.tipoBebida === filtro : true;
+    return matchNome && matchTipo;
+  });
 
   return (
     <div className="min-h-screen flex flex-col ">
-      <Header /> 
+      <Header setFiltro={setFiltro} busca={busca} setBusca={setBusca} />
 
       <main className="flex-1 container mx-auto px-6 py-16 ">
-        {/* Título */}
-        <h2 className="text-3xl font-extrabold text-center text-gray-900 mb-12 relative">
+        <h2 className="text-3xl font-bold text-center text-gray-900 mb-12 relative">
           Produtos Disponíveis
           <span className="block w-24 h-1 bg-gray-600 mx-auto mt-2 rounded-full"></span>
         </h2>
 
-        {/* Loading */}
         {loading ? (
           <div className="flex justify-center items-center h-64">
             <div className="w-12 h-12 border-4  border-t-transparent rounded-full animate-spin"></div>
@@ -57,7 +56,7 @@ export default function Home() {
             {produtosFiltrados.map((produto) => (
               <div className=" overflow-hidden  transition transform hover:-translate-y-1">
                 {produto.desconto && (
-                  <span className="absolute top-3 left-3 bg-black text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                  <span className="absolute top-3 left-3 bg-black text-white text-xs font-bold px-3 py-1 shadow-md">
                     -{produto.desconto}% OFF
                   </span>
                 )}
@@ -78,7 +77,6 @@ export default function Home() {
                   <h3 className="text-lg font-bold text-gray-900 truncate">
                     {produto.nome}
                   </h3>
-                  <p className="text-sm text-gray-500">{produto.tipoBebida}</p>
 
                   <div className="flex items-center gap-2">
                     <span className="text-gray-400 line-through text-sm">
@@ -93,9 +91,13 @@ export default function Home() {
                     3x de R$ {(produto.valorVenda / 3).toFixed(2)} sem juros
                   </p>
 
-                  <span className="text-black font-bold text-sm">
-                    -{produto.desconto}% OFF
-                  </span>
+                  {produto.desconto > 0 ? (
+                    <span className="text-black font-bold text-sm">
+                      -{produto.desconto}% OFF
+                    </span>
+                  ) : (
+                    <span className="text-gray-500 text-sm">Preço normal</span>
+                  )}
 
                   {produto.esgotado ? (
                     <span className="text-black font-bold text-sm mt-2">

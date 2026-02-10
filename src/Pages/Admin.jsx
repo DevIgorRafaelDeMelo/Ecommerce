@@ -25,9 +25,8 @@ export default function Admin() {
     <>
       {isAuth ? (
         <div className="flex ">
-          <Header />
           <Aside />
-          <main className="flex-1 p-6   ml-64">
+          <main className="flex-1  ">
             <Routes>
               <Route path="cadastro" element={<ListaProdutos />} />
             </Routes>

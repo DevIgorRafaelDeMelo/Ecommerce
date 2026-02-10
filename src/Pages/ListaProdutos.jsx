@@ -34,6 +34,8 @@ export default function ListaProdutos() {
   const [itens, setItens] = useState([]);
   const [tipoBebida, setTipoBebida] = useState("");
   const [loadingSave, setLoadingSave] = useState("");
+  const [precoOriginal, setPrecoOriginal] = useState("");
+  const [marca, setMarca] = useState("");
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "itens"), (snapshot) => {
@@ -105,6 +107,10 @@ export default function ListaProdutos() {
       await uploadBytes(storageRef, imagem);
 
       const url = await getDownloadURL(storageRef);
+      const desconto = (
+        ((precoOriginal - valorVenda) / valorVenda) *
+        100
+      ).toFixed(2);
 
       const novoItem = {
         nome,
@@ -114,6 +120,9 @@ export default function ListaProdutos() {
         imagemUrl: url,
         criadoEm: new Date(),
         ativo: true,
+        precoOriginal,
+        desconto,
+        marca,
       };
 
       await addDoc(collection(db, "itens"), novoItem);
@@ -126,6 +135,7 @@ export default function ListaProdutos() {
       setQuantidadeFardo("");
       setTipoBebida("");
       setImagem(null);
+      setMarca("");
       setLoadingSave(false);
       setIsOpen1(false);
     } catch (error) {
@@ -155,7 +165,7 @@ export default function ListaProdutos() {
   }
 
   return (
-    <div className="mt-20 w-full px-6 py-8 ">
+    <div className="mt-20 px-6  py-8 ps-64 w-[150vh] m-auto">
       <h2 className="text-3xl font-extrabold mb-8 text-center text-blue-700 tracking-wide relative">
         Produtos Cadastrados
         <span className="block w-16 h-1 bg-blue-600 mx-auto mt-2 rounded-full"></span>
@@ -204,6 +214,7 @@ export default function ListaProdutos() {
                   <tr className="bg-blue-600 text-white text-left">
                     <th className="px-4 py-3">Imagem</th>
                     <th className="px-4 py-3">Nome</th>
+                    <th className="px-4 py-3">Valor Promo</th>
                     <th className="px-4 py-3">Valor</th>
                     <th className="px-4 py-3">Fardos</th>
                     <th className="px-4 py-3">Tipo</th>
@@ -243,6 +254,9 @@ export default function ListaProdutos() {
                       </td>
                       <td className="px-4 py-3 text-green-600 font-medium">
                         R$ {produto.valorVenda}
+                      </td>
+                      <td className="px-4 py-3 text-green-600 font-medium">
+                        R$ {produto.precoOriginal}
                       </td>
                       <td className="px-4 py-3 text-blue-600 font-medium">
                         <FaCube /> {produto.quantidadeFardo}
@@ -288,7 +302,6 @@ export default function ListaProdutos() {
               Confirmar exclusão
             </h3>
 
-            {/* Dados do produto */}
             <div className="flex items-center gap-4 mb-6">
               {produtoSelecionado?.imagemUrl ? (
                 <img
@@ -313,7 +326,6 @@ export default function ListaProdutos() {
               Tem certeza que deseja excluir este produto?
             </p>
 
-            {/* Botões de ação */}
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setMostrarConfirmacao(false)}
@@ -338,12 +350,10 @@ export default function ListaProdutos() {
       {mostrarEdicao && produtoSelecionado && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
           <div className="bg-white rounded-xl shadow-2xl p-6 w-[420px]">
-            {/* Cabeçalho */}
             <h3 className="text-2xl font-bold text-blue-700 mb-6 flex items-center gap-2">
               <FaEdit /> Editar Produto
             </h3>
 
-            {/* Formulário */}
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -355,7 +365,6 @@ export default function ListaProdutos() {
               }}
               className="space-y-5"
             >
-              {/* Nome */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Nome
@@ -373,7 +382,6 @@ export default function ListaProdutos() {
                 />
               </div>
 
-              {/* Valor */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Valor de Venda (R$)
@@ -392,7 +400,6 @@ export default function ListaProdutos() {
                 />
               </div>
 
-              {/* Quantidade */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Quantidade de Fardos
@@ -410,7 +417,6 @@ export default function ListaProdutos() {
                 />
               </div>
 
-              {/* Tipo da bebida */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Tipo da Bebida
@@ -433,7 +439,6 @@ export default function ListaProdutos() {
                 </select>
               </div>
 
-              {/* Upload nova imagem */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Imagem do Produto
@@ -445,7 +450,6 @@ export default function ListaProdutos() {
                   className="w-full"
                 />
 
-                {/* Pré-visualização */}
                 {(novaImagem || produtoSelecionado.imagemUrl) && (
                   <div className="mt-3 flex justify-center">
                     <img
@@ -461,7 +465,6 @@ export default function ListaProdutos() {
                 )}
               </div>
 
-              {/* Botões */}
               <div className="flex justify-end gap-3 pt-4">
                 <button
                   type="button"
@@ -485,14 +488,11 @@ export default function ListaProdutos() {
       {isOpen1 && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
           <div className="bg-white rounded-xl shadow-2xl p-6 w-[420px]">
-            {/* Cabeçalho do modal */}
             <h3 className="text-2xl font-bold text-blue-700 mb-6 flex items-center gap-2">
               <FaPlus /> Cadastro de Produto
             </h3>
 
-            {/* Formulário de cadastro */}
             <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Nome */}
               <div className="space-y-1">
                 <label className="block text-sm font-medium text-gray-700">
                   Nome do Produto
@@ -506,10 +506,22 @@ export default function ListaProdutos() {
                 />
               </div>
 
-              {/* Valor */}
               <div className="space-y-1">
                 <label className="block text-sm font-medium text-gray-700">
-                  Valor de Venda (R$)
+                  Marca
+                </label>
+                <input
+                  type="text"
+                  placeholder="Digite a Marca"
+                  value={marca}
+                  onChange={(e) => setMarca(e.target.value)}
+                  className="border rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="block text-sm font-medium text-gray-700">
+                  Valor de Promoção
                 </label>
                 <input
                   type="number"
@@ -520,7 +532,19 @@ export default function ListaProdutos() {
                 />
               </div>
 
-              {/* Quantidade */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Valor de venda
+                </label>
+                <input
+                  type="number"
+                  value={precoOriginal}
+                  onChange={(e) => setPrecoOriginal(e.target.value)}
+                  placeholder="Digite o valor venda normal"
+                  className="border rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm"
+                />
+              </div>
+
               <div className="space-y-1">
                 <label className="block text-sm font-medium text-gray-700">
                   Quantidade de Fardos
@@ -534,7 +558,6 @@ export default function ListaProdutos() {
                 />
               </div>
 
-              {/* Tipo da bebida */}
               <div className="space-y-1">
                 <label className="block text-sm font-medium text-gray-700">
                   Tipo da Bebida
@@ -545,7 +568,16 @@ export default function ListaProdutos() {
                   className="border rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 >
                   <option value="">Selecione o tipo</option>
+                  <option value="Whisky">Whisky</option>
+                  <option value="Vodka">Vodka</option>
                   <option value="Cerveja">Cerveja</option>
+                  <option value="Vinho">Vinho</option>
+                  <option value="Gin">Gin</option>
+                  <option value="Rum">Rum</option>
+                  <option value="Tequila">Tequila</option>
+                  <option value="Licor">Licor</option>
+                  <option value="Espumante">Espumante</option>
+                  <option value="Destilados">Destilados</option>
                   <option value="Refrigerante">Refrigerante</option>
                   <option value="Suco">Suco</option>
                   <option value="Água">Água</option>
@@ -567,7 +599,6 @@ export default function ListaProdutos() {
                hover:file:bg-blue-700 cursor-pointer"
               />
 
-              {/* Pré-visualização da imagem */}
               {imagem && (
                 <div className="mt-3 flex justify-center">
                   <img
@@ -578,7 +609,6 @@ export default function ListaProdutos() {
                 </div>
               )}
 
-              {/* Botões */}
               <div className="flex justify-end gap-2 pt-4">
                 <button
                   type="button"

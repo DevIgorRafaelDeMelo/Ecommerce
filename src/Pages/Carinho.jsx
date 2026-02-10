@@ -68,7 +68,7 @@ export default function Carrinho({ onClose }) {
             <div className="flex flex-col itensCarrinhos-end w-1/3">
               <h3 className="text-sm font-semibold text-gray-700">Valores</h3>
               <p className="text-gray-600">
-                Unitário: R$ {itensCarrinho.valorUnitario.toFixed(2)}
+                Unitário: R$ 12
               </p>
               <p className="text-green-600 font-bold">
                 Total: R${" "}

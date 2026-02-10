@@ -5,6 +5,7 @@ import { db } from "../../firebase";
 import Header from "../Conponetes/Header";
 import Footer from "../Conponetes/Footer";
 import { CarrinhoContext } from "../Context/Carrinho";
+import { Link } from "react-router-dom";
 
 export default function ProdutoDetalhe() {
   const { adicionarAoCarrinho } = useContext(CarrinhoContext);
@@ -21,6 +22,12 @@ export default function ProdutoDetalhe() {
 
   const [quantidade, setQuantidade] = useState(1);
   const valorTotal = quantidade * produto.valorVenda;
+  const [showModal, setShowModal] = useState(false);
+
+  const handleAdicionar = () => {
+    adicionarAoCarrinho(produto, quantidade);
+    setShowModal(true);
+  };
 
   useEffect(() => {
     const fetchProduto = async () => {
@@ -51,7 +58,7 @@ export default function ProdutoDetalhe() {
               <img
                 src={produto.imagemUrl}
                 alt={produto.nome}
-                className="w-4/5 h-1/2 object-cover rounded-lg shadow-md mx-auto"
+                className="w-4/5  object-cover shadow-md mx-auto"
               />
             ) : (
               <div className="w-4/5 h-64 flex items-center justify-center bg-gray-200 rounded-lg mx-auto">
@@ -62,14 +69,22 @@ export default function ProdutoDetalhe() {
 
           <div className="flex-1 flex flex-col justify-between">
             <div>
-              <h2 className="text-4xl font-extrabold text-gray-900 mb-4">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4 tracking-tight">
                 {produto.nome}
               </h2>
-              <p className="text-lg text-gray-600 mb-2">
-                Categoria: {produto.tipoBebida}
+
+              <p className="text-sm uppercase text-gray-500 mb-2">
+                Categoria:{" "}
+                <span className="font-semibold text-gray-700">
+                  {produto.tipoBebida}
+                </span>
               </p>
-              <p className="text-green-600 font-bold text-3xl mb-6">
-                R$ {produto.valorVenda}
+
+              <p className="text-3xl font-bold text-blue-900 mb-6">
+                R$ {produto.valorVenda}{" "}
+                <span className="text-base font-medium text-gray-500">
+                  / UN
+                </span>
               </p>
 
               <p className="text-gray-700 mb-6 leading-relaxed">
@@ -85,24 +100,60 @@ export default function ProdutoDetalhe() {
                   min="1"
                   value={quantidade}
                   onChange={(e) => setQuantidade(Number(e.target.value))}
-                  className="border rounded-lg px-4 py-2 w-24 text-center focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="border rounded-lg px-4 py-2 w-24 text-center focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm"
                 />
               </div>
 
-              <p className="text-xl font-bold text-gray-800">
-                Total: R$ {valorTotal.toFixed(2)}
+              <p className="text-sm text-gray-600 mb-2">
+                Unidade por fardo:{" "}
+                <span className="font-semibold">{produto.quantidadeFardo}</span>
+              </p>
+
+              <p className="text-xl font-bold text-gray-800 mb-6">
+                Total:{" "}
+                <span className="text-blue-900">
+                  R$ {valorTotal.toFixed(2)}
+                </span>
               </p>
             </div>
 
             <button
-              onClick={() => adicionarAoCarrinho(produto, quantidade)}
-              className="w-full bg-blue-900 text-white py-4 rounded-lg hover:bg-blue-700 transition text-lg font-semibold shadow-md"
+              onClick={handleAdicionar}
+              className="w-full bg-gradient-to-r from-gray-800 to-gray-800 text-white py-4 rounded-lg hover:from-gray-900 hover:to-gray-900 transition text-lg font-semibold shadow-lg"
             >
               Adicionar ao Carrinho
             </button>
           </div>
         </div>
       </main>
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="bg-white shadow-2xl p-10 w-[600px] max-w-2xl text-center transform transition-all scale-100 animate-fadeIn">
+            <h3 className="text-3xl font-bold text-gray-900 mb-6">
+              Item adicionado ao carrinho!
+            </h3>
+            <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+              Seu produto foi adicionado com sucesso. Deseja continuar
+              explorando mais opções ou ir direto para o carrinho?
+            </p>
+            <div className="flex justify-center gap-6">
+              <Link
+                to="/"
+                onClick={() => setShowModal(false)}
+                className="px-6 py-3 bg-gray-100   hover:bg-gray-200 transition font-medium shadow-sm text-gray-800"
+              >
+                Continuar comprando
+              </Link>
+              <Link
+                to="/carinho"
+                className="px-6 py-3 bg-gray-600 text-white  hover:bg-gray-700 transition font-semibold shadow-md"
+              >
+                Ir para o carrinho
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </div>

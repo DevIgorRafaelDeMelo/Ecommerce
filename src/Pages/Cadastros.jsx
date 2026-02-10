@@ -15,6 +15,7 @@ export default function Cadastro() {
   const [loading, setLoading] = useState(true);
   const [tipoBebida, setTipoBebida] = useState("");
   const [loadingSave, setLoadingSave] = useState("");
+  const [precoOriginal, setPrecoOriginal] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,6 +31,10 @@ export default function Cadastro() {
       await uploadBytes(storageRef, imagem);
 
       const url = await getDownloadURL(storageRef);
+      const desconto = (
+        ((valorVenda - precoOriginal) / valorVenda) *
+        100
+      ).toFixed(2);
 
       const novoItem = {
         nome,
@@ -39,6 +44,8 @@ export default function Cadastro() {
         imagemUrl: url,
         criadoEm: new Date(),
         ativo: true,
+        precoOriginal,
+        desconto,
       };
 
       await addDoc(collection(db, "itens"), novoItem);
@@ -134,6 +141,18 @@ export default function Cadastro() {
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Valor de venda
+            </label>
+            <input
+              type="number"
+              value={precoOriginal}
+              onChange={(e) => setPrecoOriginal(e.target.value)}
+              placeholder="Digite o valor venda normal"
+              className="border rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Valor de venda Promoção
             </label>
             <input
               type="number"

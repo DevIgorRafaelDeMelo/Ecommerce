@@ -9,7 +9,7 @@ import {
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
-export default function Header() {
+export default function Header({ setFiltro, busca, setBusca }) {
   const { itensCarrinho } = useContext(CarrinhoContext);
 
   return (
@@ -37,36 +37,66 @@ export default function Header() {
         </div>
 
         <nav className="flex justify-center space-x-8 text-sm font-medium text-gray-700">
-          <a href="/whisky" className="hover:text-red-600 transition">
+          <button
+            onClick={() => setFiltro("Whisky")}
+            className="hover:text-red-600 transition"
+          >
             Whisky
-          </a>
-          <a href="/vodka" className="hover:text-red-600 transition">
+          </button>
+          <button
+            onClick={() => setFiltro("Vodka")}
+            className="hover:text-red-600 transition"
+          >
             Vodka
-          </a>
-          <a href="/cerveja" className="hover:text-red-600 transition">
+          </button>
+          <button
+            onClick={() => setFiltro("Cerveja")}
+            className="hover:text-red-600 transition"
+          >
             Cerveja
-          </a>
-          <a href="/vinho" className="hover:text-red-600 transition">
+          </button>
+          <button
+            onClick={() => setFiltro("Vinho")}
+            className="hover:text-red-600 transition"
+          >
             Vinho
-          </a>
-          <a href="/gin" className="hover:text-red-600 transition">
+          </button>
+          <button
+            onClick={() => setFiltro("Gin")}
+            className="hover:text-red-600 transition"
+          >
             Gin
-          </a>
-          <a href="/rum" className="hover:text-red-600 transition">
+          </button>
+          <button
+            onClick={() => setFiltro("Rum")}
+            className="hover:text-red-600 transition"
+          >
             Rum
-          </a>
-          <a href="/tequila" className="hover:text-red-600 transition">
+          </button>
+          <button
+            onClick={() => setFiltro("Tequila")}
+            className="hover:text-red-600 transition"
+          >
             Tequila
-          </a>
-          <a href="/licor" className="hover:text-red-600 transition">
+          </button>
+          <button
+            onClick={() => setFiltro("Licor")}
+            className="hover:text-red-600 transition"
+          >
             Licor
-          </a>
-          <a href="/espumante" className="hover:text-red-600 transition">
+          </button>
+          <button
+            onClick={() => setFiltro("Espumante")}
+            className="hover:text-red-600 transition"
+          >
             Espumante
-          </a>
-          <a href="/destilados" className="hover:text-red-600 transition">
+          </button>
+          <button
+            onClick={() => setFiltro("Destilados")}
+            className="hover:text-red-600 transition"
+          >
             Destilados
-          </a>
+          </button>
         </nav>
 
         <div className="container mx-auto flex justify-end items-center py-4 px-6 space-x-6">
@@ -74,7 +104,9 @@ export default function Header() {
             <input
               type="text"
               placeholder="Buscar"
-              className="w-full border  pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-red-500 focus:outline-none"
+              value={busca}
+              onChange={(e) => setBusca(e.target.value)}
+              className="w-full border pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-red-500 focus:outline-none"
             />
             <FiSearch
               className="absolute left-3 top-2.5 text-gray-400"

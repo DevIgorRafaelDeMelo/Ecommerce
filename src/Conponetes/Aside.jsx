@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export default function Aside() {
   return (
-    <aside className="w-64 h-screen bg-gradient-to-b from-blue-600 to-blue-800 text-white shadow-lg fixed left-0 top-0 pt-24">
+    <aside className="w-64 h-screen bg-gradient-to-b from-blue-600 to-blue-800 text-white shadow-lg fixed left-0 top-0 pt-10 ">
       <h2 className="text-xl font-bold mb-6 px-4 border-b border-blue-400 pb-2">
         Menu
       </h2>
