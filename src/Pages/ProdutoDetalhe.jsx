@@ -7,7 +7,7 @@ import Footer from "../Conponetes/Footer";
 import { CarrinhoContext } from "../Context/Carrinho";
 import { Link } from "react-router-dom";
 
-export default function ProdutoDetalhe() {
+export default function ProdutoDetalhe({ setFiltro, busca, setBusca }) {
   const { adicionarAoCarrinho } = useContext(CarrinhoContext);
 
   const { id } = useParams();
@@ -30,6 +30,8 @@ export default function ProdutoDetalhe() {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     const fetchProduto = async () => {
       const produtoRef = doc(db, "itens", id);
       const snapshot = await getDoc(produtoRef);
@@ -40,9 +42,9 @@ export default function ProdutoDetalhe() {
     fetchProduto();
   }, [id]);
 
-  if (!produto) {
+  if (!produto || !produto.id) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center items-center h-screen bg-gray-100">
         <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
@@ -50,8 +52,8 @@ export default function ProdutoDetalhe() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
-      <Header />
-      <main className="flex-1 container mx-auto px-6 py-12 flex justify-center">
+      <Header setFiltro={setFiltro} busca={busca} setBusca={setBusca} />
+      <main className="flex-1 mx-auto px-6 py-12 flex justify-center  ">
         <div className="    p-10 flex flex-col md:flex-row gap-12 max-w-5xl w-full">
           <div className="flex-1 flex items-center justify-center">
             {produto.imagemUrl ? (
@@ -72,6 +74,12 @@ export default function ProdutoDetalhe() {
               <h2 className="text-4xl font-bold text-gray-900 mb-4 tracking-tight">
                 {produto.nome}
               </h2>
+              <p className="text-sm uppercase text-gray-500 mb-2">
+                Marca:{" "}
+                <span className="font-semibold text-gray-700">
+                  {produto.marca}
+                </span>
+              </p>
 
               <p className="text-sm uppercase text-gray-500 mb-2">
                 Categoria:{" "}
@@ -88,9 +96,7 @@ export default function ProdutoDetalhe() {
               </p>
 
               <p className="text-gray-700 mb-6 leading-relaxed">
-                Uma bebida alcoólica selecionada para momentos especiais. Ideal
-                para festas, encontros com amigos ou para apreciar com requinte.
-                Aproveite a qualidade e tradição que só a nossa loja oferece.
+                {produto.descricao}
               </p>
 
               <div className="flex items-center gap-4 mb-6">
@@ -100,7 +106,7 @@ export default function ProdutoDetalhe() {
                   min="1"
                   value={quantidade}
                   onChange={(e) => setQuantidade(Number(e.target.value))}
-                  className="border rounded-lg px-4 py-2 w-24 text-center focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm"
+                  className="border  px-4 py-2 w-24 text-center    "
                 />
               </div>
 
@@ -119,7 +125,7 @@ export default function ProdutoDetalhe() {
 
             <button
               onClick={handleAdicionar}
-              className="w-full bg-gradient-to-r from-gray-800 to-gray-800 text-white py-4 rounded-lg hover:from-gray-900 hover:to-gray-900 transition text-lg font-semibold shadow-lg"
+              className="w-full bg-gradient-to-r from-gray-800 to-gray-800 text-white py-4  hover:from-gray-900 hover:to-gray-900 transition text-lg font-semibold shadow-lg"
             >
               Adicionar ao Carrinho
             </button>
@@ -127,8 +133,8 @@ export default function ProdutoDetalhe() {
         </div>
       </main>
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="bg-white shadow-2xl p-10 w-[600px] max-w-2xl text-center transform transition-all scale-100 animate-fadeIn">
+        <div className="fixed inset-0 flex items-center justify-center z-50 ">
+          <div className="bg-white shadow-2xl p-10 w-[600px] max-w-2xl text-center transform transition-all scale-100 animate-fadeIn  ">
             <h3 className="text-3xl font-bold text-gray-900 mb-6">
               Item adicionado ao carrinho!
             </h3>

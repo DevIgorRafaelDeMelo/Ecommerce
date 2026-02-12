@@ -5,11 +5,9 @@ import { Link } from "react-router-dom";
 import Header from "../Conponetes/Header";
 import Footer from "../Conponetes/Footer";
 
-export default function Home() {
+export default function Home({ filtro, setFiltro, busca, setBusca }) {
   const [produtos, setProdutos] = useState([]);
-  const [busca, setBusca] = useState("");
   const [loading, setLoading] = useState(true);
-  const [filtro, setFiltro] = useState(null);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "itens"), (snapshot) => {
@@ -29,6 +27,14 @@ export default function Home() {
     const matchTipo = filtro ? p.tipoBebida === filtro : true;
     return matchNome && matchTipo;
   });
+
+  if (!produtos) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-100">
+        <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col ">
@@ -54,10 +60,11 @@ export default function Home() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-8">
             {produtosFiltrados.map((produto) => (
-              <div className=" overflow-hidden  transition transform hover:-translate-y-1">
-                {produto.desconto && (
-                  <span className="absolute top-3 left-3 bg-black text-white text-xs font-bold px-3 py-1 shadow-md">
-                    -{produto.desconto}% OFF
+              <div className="relative overflow-hidden group">
+                {/* Badge de desconto visível apenas no hover */}
+                {produto.desconto > 0 && (
+                  <span className="absolute top-3 left-3 bg-gray-600 text-white text-xs font-bold px-3 py-1   shadow-lg transform scale-90 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition duration-300 ease-in-out font-mono">
+                    -{Math.floor(produto.desconto)}% OFF
                   </span>
                 )}
 
@@ -79,32 +86,26 @@ export default function Home() {
                   </h3>
 
                   <div className="flex items-center gap-2">
-                    <span className="text-gray-400 line-through text-sm">
-                      R$ {produto.precoOriginal}
-                    </span>
                     <span className="text-black-600 font-semibold text-xl">
                       R$ {produto.valorVenda}
                     </span>
+                    {produto.precoOriginal > 0 && (
+                      <span className="text-gray-400 line-through text-sm">
+                        R$ {produto.precoOriginal}
+                      </span>
+                    )}
                   </div>
 
                   <p className="text-sm text-gray-500">
                     3x de R$ {(produto.valorVenda / 3).toFixed(2)} sem juros
                   </p>
 
-                  {produto.desconto > 0 ? (
-                    <span className="text-black font-bold text-sm">
-                      -{produto.desconto}% OFF
-                    </span>
-                  ) : (
-                    <span className="text-gray-500 text-sm">Preço normal</span>
-                  )}
-
                   {produto.esgotado ? (
                     <span className="text-black font-bold text-sm mt-2">
                       ESGOTADO
                     </span>
                   ) : (
-                    <button className="mt-3 w-full bg-gray-700 text-white py-2 rounded-lg hover:bg-gray-900 transition">
+                    <button className="mt-3 w-full bg-gray-700 text-white py-2 hover:bg-gray-900 transition">
                       <Link
                         to={`/produto/${produto.id}`}
                         className="block w-full h-full"

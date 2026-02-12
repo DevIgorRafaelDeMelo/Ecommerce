@@ -36,6 +36,7 @@ export default function ListaProdutos() {
   const [loadingSave, setLoadingSave] = useState("");
   const [precoOriginal, setPrecoOriginal] = useState("");
   const [marca, setMarca] = useState("");
+  const [descricao, setDescricao] = useState("");
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "itens"), (snapshot) => {
@@ -67,6 +68,7 @@ export default function ListaProdutos() {
         tipoBebida: dadosAtualizados.tipoBebida,
         imagemUrl,
         atualizadoEm: new Date(),
+        descricao,
       });
 
       setMensagem("Produto atualizado com sucesso!");
@@ -123,6 +125,7 @@ export default function ListaProdutos() {
         precoOriginal,
         desconto,
         marca,
+        descricao,
       };
 
       await addDoc(collection(db, "itens"), novoItem);
@@ -136,6 +139,7 @@ export default function ListaProdutos() {
       setTipoBebida("");
       setImagem(null);
       setMarca("");
+      setDescricao("");
       setLoadingSave(false);
       setIsOpen1(false);
     } catch (error) {
@@ -166,9 +170,9 @@ export default function ListaProdutos() {
 
   return (
     <div className="mt-20 px-6  py-8 ps-64 w-[150vh] m-auto">
-      <h2 className="text-3xl font-extrabold mb-8 text-center text-blue-700 tracking-wide relative">
+      <h2 className="text-3xl font-bold mb-8 text-center text-grey-700 tracking-wide relative">
         Produtos Cadastrados
-        <span className="block w-16 h-1 bg-blue-600 mx-auto mt-2 rounded-full"></span>
+        <span className="block w-16 h-1 bg-blue-900 mx-auto mt-2 rounded-full"></span>
       </h2>
 
       <div className="fixed bottom-4 right-4">
@@ -487,140 +491,153 @@ export default function ListaProdutos() {
 
       {isOpen1 && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-          <div className="bg-white rounded-xl shadow-2xl p-6 w-[420px]">
-            <h3 className="text-2xl font-bold text-blue-700 mb-6 flex items-center gap-2">
+          <div className="bg-white  shadow-2xl p-8 w-[900px]">
+            <h3 className="text-2xl font-bold text-blue-700 mb-8 flex items-center gap-2 border-b pb-4">
               <FaPlus /> Cadastro de Produto
             </h3>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="space-y-1">
-                <label className="block text-sm font-medium text-gray-700">
-                  Nome do Produto
-                </label>
-                <input
-                  type="text"
-                  placeholder="Digite o nome"
-                  value={nome}
-                  onChange={(e) => setNome(e.target.value)}
-                  className="border rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="block text-sm font-medium text-gray-700">
-                  Marca
-                </label>
-                <input
-                  type="text"
-                  placeholder="Digite a Marca"
-                  value={marca}
-                  onChange={(e) => setMarca(e.target.value)}
-                  className="border rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="block text-sm font-medium text-gray-700">
-                  Valor de Promoção
-                </label>
-                <input
-                  type="number"
-                  placeholder="Digite o valor"
-                  value={valorVenda}
-                  onChange={(e) => setValorVenda(e.target.value)}
-                  className="border rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Valor de venda
-                </label>
-                <input
-                  type="number"
-                  value={precoOriginal}
-                  onChange={(e) => setPrecoOriginal(e.target.value)}
-                  placeholder="Digite o valor venda normal"
-                  className="border rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="block text-sm font-medium text-gray-700">
-                  Quantidade de Fardos
-                </label>
-                <input
-                  type="number"
-                  placeholder="Digite a quantidade"
-                  value={quantidadeFardo}
-                  onChange={(e) => setQuantidadeFardo(e.target.value)}
-                  className="border rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="block text-sm font-medium text-gray-700">
-                  Tipo da Bebida
-                </label>
-                <select
-                  value={tipoBebida}
-                  onChange={(e) => setTipoBebida(e.target.value)}
-                  className="border rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                >
-                  <option value="">Selecione o tipo</option>
-                  <option value="Whisky">Whisky</option>
-                  <option value="Vodka">Vodka</option>
-                  <option value="Cerveja">Cerveja</option>
-                  <option value="Vinho">Vinho</option>
-                  <option value="Gin">Gin</option>
-                  <option value="Rum">Rum</option>
-                  <option value="Tequila">Tequila</option>
-                  <option value="Licor">Licor</option>
-                  <option value="Espumante">Espumante</option>
-                  <option value="Destilados">Destilados</option>
-                  <option value="Refrigerante">Refrigerante</option>
-                  <option value="Suco">Suco</option>
-                  <option value="Água">Água</option>
-                </select>
-              </div>
-
-              <label className="block text-sm font-medium text-gray-700">
-                Imagem do Produto
-              </label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => setImagem(e.target.files[0])}
-                className="block w-full text-sm text-gray-700 
-               file:mr-4 file:py-2 file:px-4
-               file:rounded-lg file:border-0
-               file:text-sm file:font-semibold
-               file:bg-blue-600 file:text-white
-               hover:file:bg-blue-700 cursor-pointer"
-              />
-
-              {imagem && (
-                <div className="mt-3 flex justify-center">
-                  <img
-                    src={URL.createObjectURL(imagem)}
-                    alt="Pré-visualização"
-                    className="h-24 w-24 object-cover rounded-lg border border-gray-300 shadow"
+            <form
+              onSubmit={handleSubmit}
+              className="grid grid-cols-1 md:grid-cols-2 gap-6"
+            >
+              {/* Coluna 1 */}
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Nome do Produto
+                  </label>
+                  <input
+                    type="text"
+                    value={nome}
+                    onChange={(e) => setNome(e.target.value)}
+                    placeholder="Digite o nome"
+                    className="border rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
-              )}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Marca
+                  </label>
+                  <input
+                    type="text"
+                    value={marca}
+                    onChange={(e) => setMarca(e.target.value)}
+                    placeholder="Digite a marca"
+                    className="border rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Descrição
+                  </label>
+                  <textarea
+                    value={descricao}
+                    onChange={(e) => setDescricao(e.target.value)}
+                    placeholder="Digite a descrição"
+                    rows={3}
+                    className="border rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none resize-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Tipo da Bebida
+                  </label>
+                  <select
+                    value={tipoBebida}
+                    onChange={(e) => setTipoBebida(e.target.value)}
+                    className="border rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  >
+                    <option value="">Selecione o tipo de espumante</option>
+                    <option value="Brut">Brut</option>
+                    <option value="Extra Brut">Extra Brut</option>
+                    <option value="Nature">Nature (Brut Nature)</option>
+                    <option value="Seco">Seco</option>
+                    <option value="Demi-Sec">Demi-Sec</option>
+                    <option value="Doce">Doce / Moscatel</option>
+                    <option value="Prosecco">Prosecco</option>
+                    <option value="Rosé Espumante">Rosé Espumante</option>
+                  </select>
+                </div>
+              </div>
 
-              <div className="flex justify-end gap-2 pt-4">
+              {/* Coluna 2 */}
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Valor Antigo
+                  </label>
+                  <input
+                    type="number"
+                    value={valorVenda}
+                    onChange={(e) => setValorVenda(e.target.value)}
+                    placeholder="Digite o valor"
+                    className="border rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Valor de Venda
+                  </label>
+                  <input
+                    type="number"
+                    value={precoOriginal}
+                    onChange={(e) => setPrecoOriginal(e.target.value)}
+                    placeholder="Digite o valor normal"
+                    className="border rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Quantidade por Fardos
+                  </label>
+                  <input
+                    type="number"
+                    value={quantidadeFardo}
+                    onChange={(e) => setQuantidadeFardo(e.target.value)}
+                    placeholder="Digite a quantidade"
+                    className="border rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Imagem do Produto
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setImagem(e.target.files[0])}
+                    className="block w-full text-sm text-gray-700 
+                file:mr-4 file:py-2 file:px-4
+                file:rounded-lg file:border-0
+                file:text-sm file:font-semibold
+                file:bg-blue-600 file:text-white
+                hover:file:bg-blue-700 cursor-pointer"
+                  />
+                  {imagem && (
+                    <div className="mt-3 flex justify-center">
+                      <img
+                        src={URL.createObjectURL(imagem)}
+                        alt="Pré-visualização"
+                        className="h-24 w-24 object-cover rounded-lg border border-gray-300 shadow"
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Botões */}
+              <div className="col-span-1 md:col-span-2 flex justify-end gap-3 pt-6 border-t">
                 <button
                   type="button"
                   onClick={() => setIsOpen1(false)}
-                  className="px-4 py-2 rounded-lg bg-gray-300 text-gray-800 hover:bg-gray-400 transition"
+                  className="px-5 py-2 rounded-lg bg-gray-300 text-gray-800 hover:bg-gray-400 transition"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 flex items-center justify-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition font-semibold shadow-md disabled:opacity-70"
+                  className="flex items-center justify-center gap-2 bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition font-semibold shadow-md disabled:opacity-70"
                 >
                   {loadingSave ? (
                     <>
@@ -637,7 +654,6 @@ export default function ListaProdutos() {
           </div>
         </div>
       )}
-
       {mensagem && (
         <div
           className={`fixed top-20 right-10 px-4 py-3 rounded-lg shadow-lg text-sm font-medium transition-opacity duration-500 z-100 ${

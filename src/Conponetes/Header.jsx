@@ -7,10 +7,17 @@ import {
   FiShoppingBag,
   FiShoppingCart,
 } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Logo from "../assets/Img/Logo.png";
 
 export default function Header({ setFiltro, busca, setBusca }) {
   const { itensCarrinho } = useContext(CarrinhoContext);
+  const navigate = useNavigate();
+
+  const handleFiltro = (tipo) => {
+    setFiltro(tipo);
+    navigate("/");
+  };
 
   return (
     <header className=" top-0 w-full z-50">
@@ -30,72 +37,73 @@ export default function Header({ setFiltro, busca, setBusca }) {
       </div>
 
       <div className="bg-white/80 backdrop-blur-md shadow-md">
-        <div className="container mx-auto flex justify-center py-4">
-          <div className="text-3xl font-extrabold tracking-tight cursor-pointer">
-            TOO BASIC
-          </div>
-        </div>
+        <Link
+          to="/"
+          onClick={() => setFiltro(null)}
+          className="container mx-auto flex justify-center py-4"
+        >
+          <img
+            src={Logo}
+            alt="CVA Group Distribuidora"
+            className="h-22 object-contain"
+          />
+        </Link>
 
         <nav className="flex justify-center space-x-8 text-sm font-medium text-gray-700">
           <button
-            onClick={() => setFiltro("Whisky")}
-            className="hover:text-red-600 transition"
+            onClick={() => handleFiltro("Brut")}
+            className="hover:text-blue-900 transition"
           >
-            Whisky
+            Brut
           </button>
+
           <button
-            onClick={() => setFiltro("Vodka")}
-            className="hover:text-red-600 transition"
+            onClick={() => handleFiltro("Extra Brut")}
+            className="hover:text-blue-900 transition"
           >
-            Vodka
+            Extra Brut
           </button>
+
           <button
-            onClick={() => setFiltro("Cerveja")}
-            className="hover:text-red-600 transition"
+            onClick={() => handleFiltro("Nature")}
+            className="hover:text-blue-900 transition"
           >
-            Cerveja
+            Nature (Brut Nature)
           </button>
+
           <button
-            onClick={() => setFiltro("Vinho")}
-            className="hover:text-red-600 transition"
+            onClick={() => handleFiltro("Seco")}
+            className="hover:text-blue-900 transition"
           >
-            Vinho
+            Seco
           </button>
+
           <button
-            onClick={() => setFiltro("Gin")}
-            className="hover:text-red-600 transition"
+            onClick={() => handleFiltro("Demi-Sec")}
+            className="hover:text-blue-900 transition"
           >
-            Gin
+            Demi-Sec
           </button>
+
           <button
-            onClick={() => setFiltro("Rum")}
-            className="hover:text-red-600 transition"
+            onClick={() => handleFiltro("Doce")}
+            className="hover:text-blue-900 transition"
           >
-            Rum
+            Doce / Moscatel
           </button>
+
           <button
-            onClick={() => setFiltro("Tequila")}
-            className="hover:text-red-600 transition"
+            onClick={() => handleFiltro("Prosecco")}
+            className="hover:text-blue-900 transition"
           >
-            Tequila
+            Prosecco
           </button>
+
           <button
-            onClick={() => setFiltro("Licor")}
-            className="hover:text-red-600 transition"
+            onClick={() => handleFiltro("Rosé Espumante")}
+            className="hover:text-blue-900 transition"
           >
-            Licor
-          </button>
-          <button
-            onClick={() => setFiltro("Espumante")}
-            className="hover:text-red-600 transition"
-          >
-            Espumante
-          </button>
-          <button
-            onClick={() => setFiltro("Destilados")}
-            className="hover:text-red-600 transition"
-          >
-            Destilados
+            Rosé Espumante
           </button>
         </nav>
 
@@ -106,7 +114,7 @@ export default function Header({ setFiltro, busca, setBusca }) {
               placeholder="Buscar"
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
-              className="w-full border pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-red-500 focus:outline-none"
+              className="w-full border pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-grey-500 focus:outline-none"
             />
             <FiSearch
               className="absolute left-3 top-2.5 text-gray-400"
@@ -114,7 +122,7 @@ export default function Header({ setFiltro, busca, setBusca }) {
             />
           </div>
 
-          <button className="hover:text-red-600 transition">
+          <button className="hover:text-grey-600 transition">
             <FiUser size={22} />
           </button>
 

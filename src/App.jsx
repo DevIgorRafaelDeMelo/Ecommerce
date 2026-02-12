@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home.jsx";
 import Admin from "./Pages/Admin.jsx";
@@ -7,13 +7,35 @@ import { CarrinhoProvider } from "./Context/Carrinho.jsx";
 import Carrinho from "./Pages/Carinho.jsx";
 
 function App() {
+  const [filtro, setFiltro] = useState(null);
+  const [busca, setBusca] = useState("");
+
   return (
     <div>
       <CarrinhoProvider>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route
+            path="/"
+            element={
+              <Home
+                filtro={filtro}
+                setFiltro={setFiltro}
+                busca={busca}
+                setBusca={setBusca}
+              />
+            }
+          />
           <Route path="/admin/*" element={<Admin />} />
-          <Route path="/produto/:id" element={<ProdutoDetalhe />} />
+          <Route
+            path="/produto/:id"
+            element={
+              <ProdutoDetalhe
+                setFiltro={setFiltro}
+                busca={busca}
+                setBusca={setBusca}
+              />
+            }
+          />
           <Route path="/carinho" element={<Carrinho />} />
         </Routes>
       </CarrinhoProvider>
