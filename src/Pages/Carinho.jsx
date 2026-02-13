@@ -114,9 +114,11 @@ ${itensCarrinho
     );
   };
   return (
-    <div className="w-full h-full bg-white shadow-lg flex flex-col">
+    <div className="w-full min-h-screen bg-white shadow-lg flex flex-col">
       <Header setFiltro={setFiltro} busca={busca} setBusca={setBusca} />
-      <div className="container mx-auto px-4 sm:px-6 mt-10 py-8 sm:py-12">
+
+      {/* conteúdo principal ocupa o espaço disponível */}
+      <main className="flex-1 container mx-auto px-4 sm:px-6 mt-10 py-8 sm:py-12">
         <h1 className="text-xl sm:text-2xl text-center mb-6 font-light tracking-widest">
           Carrinho de Compras
         </h1>
@@ -281,7 +283,7 @@ ${itensCarrinho
             </div>
           </div>
         )}
-      </div>
+      </main>
 
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-100 bg-opacity-70 backdrop-blur-sm z-50">
@@ -364,9 +366,8 @@ ${itensCarrinho
           </div>
         </div>
       )}
-      <div className="fixed bottom-0 w-full ">
-        <Footer />
-      </div>
+
+      <Footer />
     </div>
   );
 }

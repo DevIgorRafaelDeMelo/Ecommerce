@@ -1,9 +1,8 @@
 import React from "react";
-import { FaFacebookF, FaInstagram, FaWhatsapp, FaLock } from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-800 text-white mt-12">
+    <footer className="  bg-gray-800 text-white mt-12">
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 py-10 px-6">
         <div>
           <h3 className="text-lg font-semibold mb-4">Sobre Nós</h3>
