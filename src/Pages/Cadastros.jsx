@@ -5,6 +5,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import Loading from "../Conponetes/Loading";
 import { FaSave, FaSpinner } from "react-icons/fa";
 
+
 export default function Cadastro() {
   const [nome, setNome] = useState("");
   const [valorVenda, setValorVenda] = useState("");

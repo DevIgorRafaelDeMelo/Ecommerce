@@ -256,10 +256,10 @@ export default function ListaProdutos() {
                           </span>
                         )}
                       </td>
-                      <td className="px-4 py-3 text-green-600 font-medium">
+                      <td className="px-4 py-3 text-gray-600 font-medium">
                         R$ {produto.valorVenda}
                       </td>
-                      <td className="px-4 py-3 text-green-600 font-medium">
+                      <td className="px-4 py-3 text-gray-600 font-medium">
                         R$ {produto.precoOriginal}
                       </td>
                       <td className="px-4 py-3 text-blue-600 font-medium">
@@ -564,7 +564,7 @@ export default function ListaProdutos() {
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Valor Antigo
+                    Valor de Venda
                   </label>
                   <input
                     type="number"
@@ -576,7 +576,7 @@ export default function ListaProdutos() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Valor de Venda
+                    Valor Antigo
                   </label>
                   <input
                     type="number"

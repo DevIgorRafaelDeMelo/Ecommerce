@@ -30,13 +30,24 @@ function App() {
             path="/produto/:id"
             element={
               <ProdutoDetalhe
+                filtro={filtro}
                 setFiltro={setFiltro}
                 busca={busca}
                 setBusca={setBusca}
               />
             }
           />
-          <Route path="/carinho" element={<Carrinho />} />
+          <Route
+            path="/carinho"
+            element={
+              <Carrinho
+                filtro={filtro}
+                setFiltro={setFiltro}
+                busca={busca}
+                setBusca={setBusca}
+              />
+            }
+          />
         </Routes>
       </CarrinhoProvider>
     </div>
